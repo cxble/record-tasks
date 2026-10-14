@@ -1,0 +1,23 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    name: verify
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v5.0.0
+
+      - name: Verify repository contents
+        run: |
+          test -f README.md
+          ! find . -path ./.git -prune -o -type f \( -name ".env" -o -name ".env.*" ! -name ".env.example" \) -print -quit | grep -q .
